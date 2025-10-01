@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIMC - National Identity Management Commission</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .header {
+            background: #00264d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .header .subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .login-section, .info-section {
+            padding: 20px;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        label {
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .info-box h3 {
+            color: #00264d;
+            margin-bottom: 10px;
+        }
+        
+        .secret-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .secret-status {
+            font-weight: bold;
+        }
+        
+        .status-ok {
+            color: #28a745;
+        }
+        
+        .status-missing {
+            color: #dc3545;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇳🇬 NIMC Official Portal</h1>
+            <div class="subtitle">National Identity Management Commission - Secure Access</div>
+        </div>
+        
+        <div class="content">
+            <div class="login-section">
+                <h2>Staff Login</h2>
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Staff ID:</label>
+                        <input type="text" id="username" placeholder="Enter your staff ID" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    
+                    <button type="submit">Login to NIMC Portal</button>
+                </form>
+                
+                <div id="message" class="message"></div>
+            </div>
+            
+            <div class="info-section">
+                <div class="info-box">
+                    <h3>🔐 Security Information</h3>
+                    <p>This application demonstrates secure storage of API keys using Kubernetes Secrets.</p>
+                </div>
+                
+                <div class="info-box">
+                    <h3>📋 Test Credentials</h3>
+                    <div class="secret-item">
+                        <span>Administrator:</span>
+                        <span>admin / nimc123</span>
+                    </div>
+                    <div class="secret-item">
+                        <span>Registration Officer:</span>
+                        <span>officer / officer123</span>
+                    </div>
+                    <div class="secret-item">
+                        <span>Support Staff:</span>
+                        <span>staff / staff123</span>
+                    </div>
+                </div>
+                
+                <button onclick="loadSecretsInfo()" style="background: #28a745; width: 100%;">
+                    🔑 Check Loaded Secrets
+                </button>
+                
+                <button onclick="testAPIs()" style="background: #ffc107; color: black; width: 100%; margin-top: 10px;">
+                    🚀 Test External APIs
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    messageDiv.innerHTML = `
+                        <div class="message success">
+                            <strong>✅ Login Successful!</strong><br>
+                            ${data.message}<br>
+                            <small>Role: ${data.user.role} | Login Time: ${data.user.loginTime}</small><br>
+                            <small>${data.security}</small>
+                        </div>
+                    `;
+                } else {
+                    messageDiv.innerHTML = `<div class="message error"><strong>❌ Login Failed:</strong> ${data.error}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="message error"><strong>🚫 Connection Error:</strong> Cannot reach NIMC servers</div>`;
+            }
+        });
+
+        async function loadSecretsInfo() {
+            try {
+                const response = await fetch('/api/secrets-info');
+                const data = await response.json();
+                
+                alert('Secrets Status:\n\n' + 
+                    Object.entries(data.loadedSecrets).map(([key, value]) => 
+                        `${key}: ${value}`
+                    ).join('\n') + 
+                    `\n\n${data.message}`
+                );
+            } catch (error) {
+                alert('Error loading secrets information');
+            }
+        }
+
+        async function testAPIs() {
+            try {
+                const response = await fetch('/api/test-apis');
+                const data = await response.json();
+                
+                alert('External API Status:\n\n' + 
+                    Object.entries(data.apis).map(([api, status]) => 
+                        `${api}: ${status}`
+                    ).join('\n') + 
+                    `\n\n${data.note}`
+                );
+            } catch (error) {
+                alert('Error testing APIs');
+            }
+        }
+    </script>
+</body>
+</html>

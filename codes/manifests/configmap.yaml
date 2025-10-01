@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nimc-config
+  namespace: nimc-demo
+data:
+  app-port: "3000"
+  log-level: "info"
+  company-name: "National Identity Management Commission"
+  company-website: "https://nimc.gov.ng"

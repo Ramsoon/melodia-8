@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nimc-demo
+  labels:
+    name: nimc-demo
+    environment: training

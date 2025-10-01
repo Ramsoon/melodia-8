@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: nimc-demo
+  labels:
+    app: backend
+    tier: api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+        tier: api
+    spec:
+      containers:
+      - name: backend
+        image: nimc-backend:latest
+        ports:
+        - containerPort: 3000
+        env:
+        # Environment variables from Secrets
+        - name: WEATHER_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nimc-api-keys
+              key: weather-api-key
+        - name: PAYMENT_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nimc-api-keys
+              key: payment-api-key
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nimc-api-keys
+              key: encryption-key
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nimc-api-keys
+              key: smtp-password
+        
+        # Environment variables from ConfigMap
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: nimc-config
+              key: environment
+        - name: APP_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: nimc-config
+              key: app-name
+        - name: SUPPORT_EMAIL
+          valueFrom:
+            configMapKeyRef:
+              name: nimc-config
+              key: support-email
+        
+        # Regular environment variables
+        - name: NODE_ENV
+          value: "production"
+        
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: nimc-demo
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
