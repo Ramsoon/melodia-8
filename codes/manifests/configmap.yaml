@@ -4,6 +4,9 @@ metadata:
   name: nimc-config
   namespace: nimc-demo
 data:
+  environment: "production"
+  app-name: "nimc-backend"
+  support-email: "support@nimc.gov.ng"
   app-port: "3000"
   log-level: "info"
   company-name: "National Identity Management Commission"
