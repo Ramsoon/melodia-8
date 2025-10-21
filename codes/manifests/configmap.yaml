@@ -9,5 +9,5 @@ data:
   support-email: "support@nimc.gov.ng"
   app-port: "3000"
   log-level: "info"
-  company-name: "National Identity Management Commission"
+  company-name: "National Identity Management Commissions"
   company-website: "https://nimc.gov.ng"
