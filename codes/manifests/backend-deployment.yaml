@@ -1,34 +1,36 @@
+# Defines that this is a Deployment resource
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
-  namespace: nimc-demo
+  name: backend                 # Name of the Deployment
+  namespace: nimc-demo          # Namespace where the deployment will run
   labels:
-    app: backend
-    tier: api
+    app: backend                # Label for identifying the application
+    tier: api                   # Label grouping by tier
 spec:
-  replicas: 2
+  replicas: 2                   # Number of pod replicas to maintain
   selector:
     matchLabels:
-      app: backend
+      app: backend              # Pods must match this label to be managed by this Deployment
   template:
     metadata:
       labels:
-        app: backend
+        app: backend            # Labels applied to the Pod template
         tier: api
     spec:
       containers:
-      - name: backend
-        image: successtech/nimc-backend:v2
+      - name: backend           # Name of the container
+        image: successtech/nimc-backend:v2   # Image to deploy
         ports:
-        - containerPort: 3000
+        - containerPort: 3000   # Port the application inside the container listens on
+
+        # Environment variables coming from a Kubernetes Secret
         env:
-        # Environment variables from Secrets
         - name: WEATHER_API_KEY
           valueFrom:
             secretKeyRef:
-              name: nimc-api-keys
-              key: weather-api-key
+              name: nimc-api-keys            # Name of the secret
+              key: weather-api-key           # Key to read inside the secret
         - name: PAYMENT_API_KEY
           valueFrom:
             secretKeyRef:
@@ -44,13 +46,13 @@ spec:
             secretKeyRef:
               name: nimc-api-keys
               key: smtp-password
-        
-        # Environment variables from ConfigMap
+
+        # Environment variables coming from a ConfigMap
         - name: ENVIRONMENT
           valueFrom:
             configMapKeyRef:
-              name: nimc-config
-              key: environment
+              name: nimc-config               # Name of the configmap
+              key: environment                # Key inside the configmap
         - name: APP_NAME
           valueFrom:
             configMapKeyRef:
@@ -61,28 +63,31 @@ spec:
             configMapKeyRef:
               name: nimc-config
               key: support-email
-        
-        # Regular environment variables
+
+        # Hardcoded environment variable
         - name: NODE_ENV
           value: "production"
-        
+
+        # Resource requests and limits to control CPU & memory usage
         resources:
           requests:
-            memory: "128Mi"
-            cpu: "100m"
+            memory: "128Mi"      # Minimum memory required
+            cpu: "100m"          # Minimum CPU required
           limits:
-            memory: "256Mi"
-            cpu: "200m"
+            memory: "256Mi"      # Maximum allowed memory usage
+            cpu: "200m"          # Maximum allowed CPU usage
+
 ---
+# Service exposes the backend pods inside the cluster
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
+  name: backend-service         # Name of the Service
   namespace: nimc-demo
 spec:
   selector:
-    app: backend
+    app: backend                # The service routes traffic to pods with this label
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 3000                # Port exposed within the cluster
+      targetPort: 3000          # Port the container listens on

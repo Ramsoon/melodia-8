@@ -1,13 +1,16 @@
+# Specifies this resource is a ConfigMap
 apiVersion: v1
 kind: ConfigMap
+
 metadata:
-  name: nimc-config
-  namespace: nimc-demo
-data:
-  environment: "production"
-  app-name: "nimc-backend"
-  support-email: "support@nimc.gov.ng"
-  app-port: "3000"
-  log-level: "info"
-  company-name: "National Identity Management Commissions"
-  company-website: "https://nimc.gov.ng"
+  name: nimc-config            # Name of the ConfigMap
+  namespace: nimc-demo         # The namespace where this ConfigMap will be created
+
+data:                          # Key-value pairs stored as plain text (non-secret)
+  environment: "production"    # Application environment mode (dev/staging/production)
+  app-name: "nimc-backend"     # Name of the application, can be used for display/logging
+  support-email: "support@nimc.gov.ng"  # Email for system support or notifications
+  app-port: "3000"             # Port the application is configured to listen on internally
+  log-level: "info"            # Defines the verbosity of logs (debug/info/warn/error)
+  company-name: "National Identity Management Commissions"  # Organization name for display
+  company-website: "https://nimc.gov.ng" # Official website, could be shown in app or docs

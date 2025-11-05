@@ -1,7 +1,17 @@
+# Specifies the API version being used for this Kubernetes object
 apiVersion: v1
+
+# Declares that this resource is a Namespace
 kind: Namespace
+
 metadata:
+  # The name of the namespace to be created
   name: nimc-demo
+  
+  # Optional labels that categorize or group this namespace
   labels:
+    # Label identifying the namespace by name
     name: nimc-demo
-    environment: training
+    
+    # Label indicating the purpose or environment of the namespace
+    environment: production

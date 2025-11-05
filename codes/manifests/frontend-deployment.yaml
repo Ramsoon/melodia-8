@@ -1,46 +1,54 @@
-apiVersion: apps/v1
-kind: Deployment
+# Define the API version and resource type
+apiVersion: apps/v1                  # API version for Deployment objects
+kind: Deployment                     # This resource is a Deployment
+
 metadata:
-  name: frontend
-  namespace: nimc-demo
-  labels:
+  name: frontend                     # Name of the Deployment
+  namespace: nimc-demo               # Namespace where the Deployment will be created
+  labels:                            # Key-value pairs to identify the Deployment
     app: frontend
     tier: web
+
 spec:
-  replicas: 2
-  selector:
+  replicas: 2                        # Number of pod replicas to run
+  selector:                          # Defines how the Deployment finds which Pods to manage
     matchLabels:
-      app: frontend
-  template:
+      app: frontend                  # Must match the labels in pod template
+
+  template:                          # Pod template that defines how the pods should be created
     metadata:
-      labels:
+      labels:                        # Labels assigned to Pods created by this Deployment
         app: frontend
         tier: web
     spec:
       containers:
-      - name: frontend
-        image: successtech/nimc-frontend:v2
+      - name: frontend               # Container name inside the pod
+        image: successtech/nimc-frontend:v2  # Docker image to deploy
         ports:
-        - containerPort: 80
-        resources:
-          requests:
+        - containerPort: 80          # Exposes port 80 inside the container (HTTP)
+        resources:                   # Resource requests and limits for scheduler
+          requests:                  # Minimum resources required to run the container
             memory: "64Mi"
             cpu: "50m"
-          limits:
+          limits:                    # Maximum resources the container can use
             memory: "128Mi"
             cpu: "100m"
+
 ---
-apiVersion: v1
-kind: Service
+# Kubernetes Service to expose the frontend Deployment
+apiVersion: v1                       # API version for Service objects
+kind: Service                        # This resource is a Service
+
 metadata:
-  name: frontend-service
-  namespace: nimc-demo
+  name: frontend-service             # Name of the Service
+  namespace: nimc-demo               # Service will be created in the same namespace
+
 spec:
   selector:
-    app: frontend
+    app: frontend                    # Service will forward traffic to pods with this label
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-      nodePort: 30018
-  type: NodePort
+    - protocol: TCP                  # Communication protocol
+      port: 80                       # Service port exposed inside the cluster
+      targetPort: 80                 # Port on the container that receives the traffic
+      nodePort: 30018                # Port on each worker node for external access (NodePort)
+  type: NodePort                     # Service type allowing external access via node port
