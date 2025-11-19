@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: backend           # Name of the container
-        image: successtech/nimc-backend:v2   # Image to deploy
+        image: successtech/bcb8:v1   # Image to deploy
         ports:
         - containerPort: 3000   # Port the application inside the container listens on
 

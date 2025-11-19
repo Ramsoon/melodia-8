@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: frontend               # Container name inside the pod
-        image: successtech/nimc-frontend:v2  # Docker image to deploy
+        image: successtech/bcf8:v1  # Docker image to deploy
         ports:
         - containerPort: 80          # Exposes port 80 inside the container (HTTP)
         resources:                   # Resource requests and limits for scheduler

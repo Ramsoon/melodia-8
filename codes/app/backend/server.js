@@ -15,9 +15,9 @@ app.use(express.json());
 
 // Simple in-memory user database
 const users = [
-    { username: 'bashir', password: 'nimc123', role: 'Administrator' },
-    { username: 'khadija', password: 'khad123', role: 'Registration Officer' },
-    { username: 'harrison', password: 'harry123', role: 'Support Staff' }
+    { username: 'anthony', password: 'anthony123', role: 'Administrator' },
+    { username: 'prescilla', password: 'prescilla123', role: 'Registration Officer' },
+    { username: 'albana', password: 'albana123', role: 'Support Staff' }
 ];
 
 // Add root endpoint for testing
